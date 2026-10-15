@@ -2,7 +2,7 @@ import connectToDB from "@/lib/mongoose";
 import User from "@/lib/models/User";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { jwtSign } from "@/lib/jwt";
 import { cookies } from "next/headers";
 
 export async function POST(request) {
@@ -98,7 +98,7 @@ export async function POST(request) {
     }
     
     console.log("Creating JWT token for user:", user._id);
-    const token = jwt.sign(
+    const token = await jwtSign(
       { userId: user._id.toString(), role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }

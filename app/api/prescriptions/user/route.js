@@ -2,7 +2,7 @@ import connectToDB from "@/lib/mongoose";
 import { Prescription, Doctor, User, getRegisteredModels } from "@/lib/models";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "@/lib/jwt";
 import mongoose from "mongoose";
 
 export async function GET(request) {
@@ -26,7 +26,7 @@ export async function GET(request) {
     // Verify token and get user ID
     let userId;
     try {
-      const decoded = jwt.verify(tokenCookie.value, process.env.JWT_SECRET);
+      const decoded = await jwtVerify(tokenCookie.value, process.env.JWT_SECRET);
       userId = decoded.userId;
       console.log("Getting prescriptions for authenticated user:", userId);
     } catch (error) {

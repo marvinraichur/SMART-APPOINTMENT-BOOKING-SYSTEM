@@ -3,7 +3,7 @@ import connectToDB from "@/lib/mongoose";
 import Doctor from "@/lib/models/Doctor";
 import AppointmentSlot from "@/lib/models/AppointmentSlot";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "@/lib/jwt";
 
 export async function GET(request, context) {
   try {
@@ -76,7 +76,7 @@ export async function POST(request, context) {
     // Verify token
     let decoded;
     try {
-      decoded = jwt.verify(userToken, process.env.JWT_SECRET);
+      decoded = await jwtVerify(userToken, process.env.JWT_SECRET);
     } catch (error) {
       return NextResponse.json(
         { success: false, message: "Unauthorized - Invalid token" },

@@ -4,7 +4,7 @@ import Appointment from "@/lib/models/Appointment";
 import AppointmentSlot from "@/lib/models/AppointmentSlot";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "@/lib/jwt";
 
 // GET a specific appointment
 export async function GET(request, context) {
@@ -92,7 +92,7 @@ export async function PATCH(request, context) {
     
     let decoded;
     try {
-      decoded = jwt.verify(tokenCookie.value, process.env.JWT_SECRET);
+      decoded = await jwtVerify(tokenCookie.value, process.env.JWT_SECRET);
     } catch (error) {
       return NextResponse.json({ 
         success: false, 
@@ -178,7 +178,7 @@ export async function DELETE(request, context) {
     
     let decoded;
     try {
-      decoded = jwt.verify(tokenCookie.value, process.env.JWT_SECRET);
+      decoded = await jwtVerify(tokenCookie.value, process.env.JWT_SECRET);
     } catch (error) {
       return NextResponse.json({ 
         success: false, 

@@ -3,7 +3,7 @@ import connectToDB from "@/lib/mongoose";
 import User from "@/lib/models/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "@/lib/jwt";
 
 // Helper function to get the current user ID from JWT token
 const getCurrentUserId = async () => {
@@ -18,7 +18,7 @@ const getCurrentUserId = async () => {
     }
     
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = await jwtVerify(token, process.env.JWT_SECRET);
       
       // Check different possible ID field names in the token
       // Common fields used for user IDs in JWT tokens
